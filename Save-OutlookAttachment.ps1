@@ -24,8 +24,10 @@ Function Save-OutlookAttachment {
         $SendName = $_.SenderName
         $_.attachments | ForEach-Object {
             $attachmentName = $_.fileName
-            $fileType = ('txt')
+            # Specify the fileType here
+            $fileType = ('pdf')
             $i += 1
+            # Save attachment if it is of the correct file type
             If ( $attachmentName.Contains($fileType) ) {
                  $_.saveasfile(( Join-Path $path $SendName"_"$attachmentName ))
             }
