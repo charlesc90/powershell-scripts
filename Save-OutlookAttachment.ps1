@@ -1,16 +1,24 @@
-# This function retreives mail from the default outlook account inbox.
+########################################################################################################
+# Script: Save-OutlookAttachment.ps1
+# Author: Charles Cox
+# Date: 20 December 2019
+# Description: This script saves outlook attachments of a specified file type to the given destination
+########################################################################################################
+
+# Retreive mail from the default outlook account inbox.
 Function Save-OutlookAttachment {
+
+    # Destination filepath
+    $path = "C:\Users\Charles.Cox\Desktop"
 
     # Add .NET core class for outlook
     Add-Type -AssemblyName "Microsoft.Office.Interop.Outlook" | Out-Null
     $olFolders = “Microsoft.Office.Interop.Outlook.olDefaultFolders” -as [type]
     # Define outlook COM object and namespace
-    $outlook = New-Object -Comobject outlook.application
+    $outlook = New-Object -Comobject Outlook.Application
     $namespace = $outlook.GetNameSpace("MAPI") 
     # Select the outlook folder to query. If you neet to select a different folder, change ::olFolder...
-    $folder = $namespace.getDefaultFolder($olFolders::olFolderInbox)
-    $path = "C:\Users\Charles.Cox\Desktop" 
-
+    $folder = $namespace.getDefaultFolder($olFolders::olFolderInbox) 
     # Loop through selected folder and return attachment fileName for the selected fileType
     $folder.Items | foreach {
         $SendName = $_.SenderName
@@ -19,8 +27,7 @@ Function Save-OutlookAttachment {
             $fileType = ('txt')
             $i += 1
             If ( $attachmentName.Contains($fileType) ) {
-                 # $_.fileName
-                 $_.saveasfile(( Join-Path $path $i"_"$attachmentName ))
+                 $_.saveasfile(( Join-Path $path $SendName"_"$attachmentName ))
             }
         }
      }
