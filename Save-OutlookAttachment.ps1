@@ -5,7 +5,6 @@
 # Description: This script saves outlook attachments of a specified file type to the given destination
 ########################################################################################################
 
-# Retreive mail from the default outlook account inbox.
 Function Save-OutlookAttachment {
 
     # Destination filepath
