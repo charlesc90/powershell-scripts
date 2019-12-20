@@ -1,53 +1,37 @@
 ########################################################################################################
-# Script: Change-LocalAdminPassword.ps1
+# Script: Save-OutlookAttachment.ps1
 # Author: Charles Cox
 # Date: 20 December 2019
-# Description: This script reads a list of computers from a file and changes their local admin passwords
+# Description: This script saves outlook attachments of a specified file type to the given destination
 ########################################################################################################
 
-# Read list of computers from text file
-$Computers = Get-Content -path C:\Users\Charles.Cox\Desktop\computers.txt
-$Password = Read-Host "Enter the password" -AsSecureString
-$Confirmpassword = Read-Host "Confirm the password" -AsSecureString
-$Pwd1_text = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
-$Pwd2_text = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($confirmpassword))
+Function Save-OutlookAttachment {
 
-if($Pwd1_text -ne $Pwd2_text) { 
-	Write-Host "The passwords do not match."
-}
+    # Destination filepath
+    $path = "C:\Users\Charles.Cox\Desktop"
 
-if($Pwd1_text -eq $Pwd2_text) {
-	Foreach($computer in $computers) {
-		$Computer = $Computer.toupper()
-		$Isonline = "OFFLINE"
-		$Status = "SUCCESS"
-		Write-Verbose "Working on $Computer"
-		if((Test-Connection -ComputerName $Computer -count 1 -ErrorAction 0)) {
-			$Isonline = "ONLINE"
-			Write-Verbose "`t$Computer is Online"
+    # Add .NET core class for outlook
+    Add-Type -AssemblyName "Microsoft.Office.Interop.Outlook" | Out-Null
+    $olFolders = “Microsoft.Office.Interop.Outlook.olDefaultFolders” -as [type]
+    # Define outlook COM object and namespace
+    $outlook = New-Object -ComObject Outlook.Application
+    $namespace = $outlook.GetNameSpace("MAPI") 
+    # Select the outlook folder to query. If you neet to select a different folder, change ::olFolder...
+    $folder = $namespace.getDefaultFolder($olFolders::olFolderInbox) 
+    # Loop through selected folder and return attachment fileName for the selected fileType
+    $folder.Items | foreach {
+        $SendName = $_.SenderName
+        $_.attachments | ForEach-Object {
+            $attachmentName = $_.fileName
+            # Specify the fileType here
+            $fileType = ('xlsx')
+            $i += 1
+            # Save attachment if it is of the correct file type
+            If ( $attachmentName.Contains($fileType) ) {
+                 $_.saveasfile(( Join-Path $path $SendName"_"$attachmentName ))
+            }
         }
-		else {
-			Write-Verbose "`t$Computer is OFFLINE"
-		}
-		try {
-			$Account = [ADSI]("WinNT://$Computer/Administrator,user")
-			$Account.psbase.invoke("setpassword",$Pwd1_text)
-			Write-Verbose "`tPassword Change completed successfully"
-        }
-		catch{
-			$Status = "FAILED"
-			Write-Verbose "`tFailed to Change the administrator password. Error: $_"
-        }
-		$Obj = New-Object -TypeName PSObject -Property @{
-			ComputerName = $Computer
-			IsOnline = $Isonline
-			PasswordChangeStatus = $Status
-		}
-		$Obj | Select ComputerName, IsOnline, PasswordChangeStatus 
+     }
+ }
 
-		if($Status -eq "FAILED" -or $Isonline -eq "OFFLINE") {
-			$Stream.writeline("$Computer `t $Isonline `t Status")
-		}
-	}
-}
-Write-Host "Press any key to continue ..."
+Save-OutlookAttachment
