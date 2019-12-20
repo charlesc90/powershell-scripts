@@ -1,4 +1,5 @@
-$Computers = Get-Content -path C:\Users\Charles.Cox\Desktop\test.txt
+# Read list of computers from text file
+$Computers = Get-Content -path C:\Users\Charles.Cox\Desktop\computers.txt
 $Password = Read-Host "Enter the password" -AsSecureString
 $Confirmpassword = Read-Host "Confirm the password" -AsSecureString
 $Pwd1_text = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
