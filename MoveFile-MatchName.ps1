@@ -22,21 +22,21 @@ Foreach ($file in $fileList) {
    # -Match
    # -Like
    # -Contains
-   if($file.BaseName -Match 'test-01') {
+   If($file.BaseName -Match 'test-01') {
 		#$matches.values gives just the values that match based on -Match flag
         $fileName = $matches.Values
         # Store full path to file in $fileToCheck variable
         $fileToCheck ="$dstDir\$file"
         #Check if File Exists and if it does, print error
-        if (Test-Path $fileToCheck -Pathtype Leaf) {
+        If (Test-Path $fileToCheck -Pathtype Leaf) {
 			Write-Warning "File $file.Name already exists at $dstDir"
         }
         #If file does not exist then move the file to the destination directory               
-        else {
+        Else {
 			Move-Item -Path $($file.FullName) -Destination $dstDir
         }
     }
-   else {
+   Else {
         $null
    }
 }
