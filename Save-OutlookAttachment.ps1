@@ -25,7 +25,6 @@ Function Save-OutlookAttachment {
             $attachmentName = $_.fileName
             # Specify the fileType here
             $fileType = ('xlsx')
-            $i += 1
             # Save attachment if it is of the correct file type
             If ( $attachmentName.Contains($fileType) ) {
                  $_.saveasfile(( Join-Path $path $SendName"_"$attachmentName ))
