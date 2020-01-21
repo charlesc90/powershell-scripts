@@ -1,6 +1,5 @@
 ########################################################################################################
 # Script: Save-OutlookAttachment.ps1
-# Author: Charles Cox
 # Date: 20 December 2019
 # Description: This script saves outlook attachments of a specified file type to the given destination
 ########################################################################################################
@@ -32,5 +31,4 @@ Function Save-OutlookAttachment {
         }
      }
  }
-
 Save-OutlookAttachment
