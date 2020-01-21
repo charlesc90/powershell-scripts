@@ -1,6 +1,5 @@
 ########################################################################################################
 # Script: Get-SenderEmail.ps1
-# Author: Charles Cox
 # Date: 20 December 2019
 # Description: This script displays the unique email addresses of senders in a specified mailbox
 ########################################################################################################
