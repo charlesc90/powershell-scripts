@@ -2,6 +2,10 @@
 
 This is a collection of PowerShell scripts to assist various administrative tasks.
 
+# Rename-Files.ps1
+
+This script replaces a string with another string for all files' filenames in a directory. 
+
 # Download-EmailHyperlinks.ps1
 
 This script will download files from hyperlinks in your Outlook emails. You need to -
