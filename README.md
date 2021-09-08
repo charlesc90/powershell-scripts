@@ -2,6 +2,10 @@
 
 This is a collection of PowerShell scripts to assist various administrative tasks.
 
+# Forms.ps1
+
+This is a basic Windows Forms window template with buttons. Each button calls a function. Lines 125-140 show that when the button is clicked, the function in curly brackets is called.
+
 # Rename-Files.ps1
 
 This script replaces a string with another string for all files' filenames in a directory. 
